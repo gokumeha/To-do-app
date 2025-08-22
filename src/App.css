@@ -14,7 +14,7 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: #90a7d5;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -35,4 +35,15 @@
   to {
     transform: rotate(360deg);
   }
+}
+/* Styling for completed items */
+.todo-item.completed span {
+  text-decoration: line-through;
+  color: #888;
+}
+
+/* Make the text part of the todo item clickable */
+.todo-item span {
+  cursor: pointer;
+  flex-grow: 1; /* Allows the span to take up available space */
 }
