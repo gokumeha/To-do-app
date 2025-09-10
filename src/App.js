@@ -16,20 +16,19 @@ function App() {
   const [todos, setTodos] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true); // --- Loading State ---
+  const [loading, setLoading] = useState(true); 
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
-      // The loading state related to data will be handled in the next useEffect
     });
     return () => unsubscribe();
   }, []);
 
   useEffect(() => {
     const getTodos = async () => {
-      setLoading(true); // Set loading true when user changes
-      if (!user) {
+      setLoading(true); 
+        if (!user) {
         setTodos([]);
         setLoading(false);
         return;
@@ -37,7 +36,7 @@ function App() {
       const q = query(collection(db, "todos"), where("userId", "==", user.uid));
       const data = await getDocs(q);
       setTodos(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-      setLoading(false); // Set loading false after fetch
+      setLoading(false); 
     };
 
     getTodos();
@@ -61,7 +60,6 @@ function App() {
   };
 
 
-  // A new component for the Modal
   const TodoModal = ({ todo, onClose, onToggleComplete, onDelete }) => {
   if (!todo) return null;
 
@@ -90,11 +88,10 @@ function App() {
     const newTodoData={
       text: inputValue,
       completed: false,
-      userId: user.uid, // Save as a proper Date object
+      userId: user.uid, 
       reminderSent: false };
 
     const newTodoRef = await addDoc(collection(db, "todos"), newTodoData);
-    // Optimistically update UI
     setTodos([...todos, { id: newTodoRef.id, text: inputValue, completed: false, userId: user.uid,  }]);
     setInputValue('');
   };
@@ -115,7 +112,6 @@ function App() {
     );
   };
 
-  // --- Loading State Component ---
   const LoadingSpinner = () => (
     <div className="loading-spinner">
       <div className="spinner"></div>
@@ -177,11 +173,11 @@ function App() {
   onClose={closeModal}
    onToggleComplete={(id, currentStatus) => {
     handleToggleComplete(id, currentStatus);
-    closeModal(); // Add this line
+    closeModal(); 
   }}
   onDelete={(id) => {
     handleDeleteTask(id);
-    closeModal(); // Close modal after deleting
+    closeModal(); 
   }}
 />
     </div>

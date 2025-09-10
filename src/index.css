@@ -12,7 +12,6 @@ body {
   min-height: 100vh;
 }
 
-/* --- Glassmorphism Container --- */
 .app-container {
   width: 100%;
   max-width: 550px;
@@ -179,13 +178,12 @@ h1 {
   background: rgba(255, 255, 255, 0.2);
   color: white;
   outline: none;
-  font-family: inherit; /* Ensures the font matches the rest of the app */
+  font-family: inherit;
 }
 
 .form-container {
-  flex-wrap: wrap; /* Allow inputs to wrap on smaller screens */
+  flex-wrap: wrap; 
 }
-/* --- Input for Reminder --- */
 .reminder-input {
   padding: 15px;
   border: 1px solid rgba(255, 255, 255, 0.3);
@@ -200,10 +198,8 @@ h1 {
   flex-wrap: wrap;
 }
 .todo-item {
-  cursor: pointer; /* Indicate that the whole item is clickable */
+  cursor: pointer; 
 }
-
-/* --- Modal Styles --- */
 .modal-overlay {
   position: fixed;
   top: 0;
