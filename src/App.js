@@ -13,7 +13,6 @@ function App() {
   const closeModal = () => {setIsModalOpen(false);setSelectedTodo(null);};
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState(null);
-  const [reminderTime, setReminderTime] = useState('');
   const [todos, setTodos] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const [user, setUser] = useState(null);
@@ -73,9 +72,6 @@ function App() {
         <h2>{todo.text}</h2>
         <p><strong>Status:</strong> {todo.completed ? "Completed" : "Pending"}</p>
         <p><strong>Created:</strong> {todo.createdAt?.toDate().toLocaleString()}</p>
-        {todo.reminderTime && (
-          <p><strong>Reminder:</strong> {todo.reminderTime?.toDate().toLocaleString()}</p>
-        )}
         <div className="modal-actions">
           <button className="modal-button" onClick={() => onToggleComplete(todo.id, todo.completed)}>
             {todo.completed ? "Mark as Pending" : "Mark as Complete"}
@@ -94,15 +90,13 @@ function App() {
     const newTodoData={
       text: inputValue,
       completed: false,
-      userId: user.uid,
-      reminderTime: reminderTime ? new Date(reminderTime) : null, // Save as a proper Date object
+      userId: user.uid, // Save as a proper Date object
       reminderSent: false };
 
     const newTodoRef = await addDoc(collection(db, "todos"), newTodoData);
     // Optimistically update UI
-    setTodos([...todos, { id: newTodoRef.id, text: inputValue, completed: false, userId: user.uid, reminderTime,newTodoData: reminderTime ? new Date(reminderTime) : null, reminderSent: false }]);
+    setTodos([...todos, { id: newTodoRef.id, text: inputValue, completed: false, userId: user.uid,  }]);
     setInputValue('');
-    setReminderTime('')
   };
 
   const handleDeleteTask = async (id) => {
@@ -141,7 +135,7 @@ function App() {
       ) : (
         <>
           <div className="header">
-            <h1>{user.displayName.split(' ')[0]}'s Tasks</h1>
+            <h1>{user.displayName?.split(' ')[0] || 'User'}'s Tasks</h1>
             <button onClick={handleSignOut} className="auth-button">Sign Out</button>
           </div>
           <form className="form-container" onSubmit={handleAddTask}>
@@ -151,12 +145,6 @@ function App() {
               placeholder="Add a new task..."
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
-            />
-            <input
-                  type="datetime-local"
-                  className="reminder-input"
-                  value={reminderTime}
-                  onChange={(e) => setReminderTime(e.target.value)}
             />
             <button type="submit" className="add-button">
               <IoMdAdd />
@@ -187,7 +175,10 @@ function App() {
       <TodoModal
   todo={selectedTodo}
   onClose={closeModal}
-  onToggleComplete={handleToggleComplete}
+   onToggleComplete={(id, currentStatus) => {
+    handleToggleComplete(id, currentStatus);
+    closeModal(); // Add this line
+  }}
   onDelete={(id) => {
     handleDeleteTask(id);
     closeModal(); // Close modal after deleting
